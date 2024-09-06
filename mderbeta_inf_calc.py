@@ -14,7 +14,7 @@ import scipy.stats
 from huggingface_hub import login
 
 # Log in to Hugging Face with your API key
-login(token="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") 
+login(token="api_key") 
 
 SEED = 42
 NUM_PROC = 5
