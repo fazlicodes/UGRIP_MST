@@ -17,7 +17,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Log in to Hugging Face with your API key
-login(token="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")  
+login(token="api_key")  
 
 
 SEED = 42
