@@ -14,7 +14,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Log in to Hugging Face with your API key
-login(token="api_key")  
+login(token="<api_key>")  
 
 SEED = 42
 random.seed(SEED)
@@ -29,11 +29,11 @@ def mean_confidence_interval(data, confidence=0.95):
     h = se * scipy.stats.t.ppf((1 + confidence) / 2., n-1)
     return m, h
 
-def simulate_evaluation(model, tokenizer, device, batch_size):
+def simulate_evaluation(model, tokenizer, device, batch_size, nos_samples=128):
     inf_time_stats = []
     labels = ['label 1', 'label 2']
     
-    for _ in tqdm(range(128 // batch_size)):  # Adjust number of iterations to simulate different batch sizes
+    for _ in tqdm(range(nos_samples // batch_size)):  # Adjust number of iterations to simulate different batch sizes
         batch_texts = [f"This is a simulation of zero-shot classification task. Your task, given this text: 'This is dummy text' is to assign which of the following labels: {labels}, suited to that text?" for _ in range(batch_size)]
         inputs = tokenizer(batch_texts, return_tensors='pt', padding=True, truncation=True).to(device)
 
@@ -52,6 +52,11 @@ def simulate_evaluation(model, tokenizer, device, batch_size):
 
 def initialize_model_and_tokenizer(model_id, device):
     tokenizer = AutoTokenizer.from_pretrained(model_id, use_auth_token=True)
+
+    # Check if the tokenizer has a padding token, and if not, set one.
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token  # Set the padding token to the end-of-sequence token
+
     if 'mdeberta' in model_id:
         model = AutoModelForSequenceClassification.from_pretrained(model_id, torch_dtype=torch.bfloat16, use_auth_token=True)
     else:
@@ -76,7 +81,7 @@ if __name__ == "__main__":
     
     for batch_size in batch_sizes:
         print(f"Evaluating with batch size: {batch_size}")
-        mean, ci, df = simulate_evaluation(model, tokenizer, device, batch_size)
+        mean, ci, df = simulate_evaluation(model, tokenizer, device, batch_size, nos_samples=2048)
         df.to_csv(f'ind_results/{model_name}_batch_{batch_size}_inference_time.csv', index=False)
         results.append({'Model': model_id, 'Batch Size': batch_size, 'Inference Time Mean': mean, 'Inference Time CI': ci})
 
@@ -85,6 +90,7 @@ if __name__ == "__main__":
 
     model_ids = ["Qwen/Qwen2-0.5B-Chat", "Qwen/Qwen2-1.5B-Chat", "Qwen/Qwen2-72B-Chat", 'CohereForAI/aya-23-8B', 'CohereForAI/aya-23-35B',
             'google/gemma-2-2b', 'google/gemma-2-9b', 'google/gemma-2-27b','meta-llama/Meta-Llama-3.1-8B', 'meta-llama/Meta-Llama-3.1-70B']
+    
     llm_results = []
 
     for model_id in tqdm(model_ids):
