@@ -3,6 +3,6 @@ microsoft/mdeberta-v3-base,512,"Mean Inference Time: 0.0243 s, CI: 0.0069",732, 
 Qwen/Qwen2-0.5B-Chat,128,"Mean Inference Time: 0.0540 s, CI: 0.0489",240,"Mean Inference Time: 0.0696 s, CI: 0.0784"
 Qwen/Qwen2-1.5B-Chat,64,"Mean Inference Time: 0.0426 s, CI: 0.0193",118, "Mean Inference Time: 0.0580 s, CI: 0.0375"
 CohereForAI/aya-23-8B,32,"Mean Inference Time: 0.3242 s, CI: 0.0370",36, "Mean Inference Time: 0.3729 s, CI: 0.0452"
-google/gemma-2-2b,32,"Mean Inference Time: 0.1870 s, CI: 0.0638",72,"Mean Inference Time: 0.3799 s, CI: 0.0968"
+google/gemma-2-2b,32,"Mean Inference Time: 0.1670 s, CI: 0.0226",72,"Mean Inference Time: 0.3473 s, CI: 0.0269"
 google/gemma-2-9b,16,"Mean Inference Time: 0.5098 s, CI: 0.0147",18,"Mean Inference Time: 0.5682 s, CI: 0.0225"
 meta-llama/Meta-Llama-3.1-8B,32,"Mean Inference Time: 0.2123 s, CI: 0.0220",36,"Mean Inference Time: 0.2415 s, CI: 0.0549"
